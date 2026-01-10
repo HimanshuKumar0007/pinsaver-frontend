@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PinSaver - Professional Pinterest Video Downloader</title>
+  <meta name="description"
+    content="Download Pinterest videos in high quality for free. Fast, secure, and easy to use." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Icons (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #e60023;
+      /* Pinterest Red */
+      --primary-hover: #ad081b;
+      --dark: #111111;
+      --light: #f8f9fa;
+      --gray: #767676;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* --- Navbar --- */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      margin-left: 20px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      background: linear-gradient(135deg, #fff 0%, #f1f1f1 100%);
+      padding: 80px 20px;
+      text-align: center;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .hero p {
+      color: var(--gray);
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    /* --- Input Box --- */
+    .downloader-box {
+      background: white;
+      padding: 10px;
+      border-radius: 50px;
+      box-shadow: var(--shadow);
+      display: flex;
+      width: 100%;
+      max-width: 700px;
+      border: 1px solid #eee;
+      position: relative;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    input {
+      width: 100%;
+      padding: 18px 18px 18px 50px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .paste-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #eee;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      transition: 0.2s;
+    }
+
+    .paste-btn:hover {
+      background: #ddd;
+    }
+
+    .download-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 40px;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .download-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* --- Results Area --- */
+    #result-area {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .video-card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .success-msg {
+      color: #00b894;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .download-link {
+      display: inline-block;
+      background: var(--dark);
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: transform 0.2s;
+    }
+
+    .download-link:hover {
+      transform: translateY(-2px);
+      background: #333;
+    }
+
+    .error-msg {
+      background: #ffe6e6;
+      color: #d63031;
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    /* --- Loader --- */
+    .loader {
+      display: none;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- Info Sections --- */
+    .info-section {
+      padding: 60px 20px;
+      background: white;
+      text-align: center;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 40px auto 0;
+    }
+
+    .step-card {
+      padding: 30px;
+      background: var(--light);
+      border-radius: 15px;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    /* --- Features Section --- */
+    .features-section {
+      padding: 60px 20px;
+      background: #f8f9fa;
+      /* Light background to distinguish from other sections */
+      text-align: center;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 40px auto 0;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 35px 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #eee;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background: rgba(230, 0, 35, 0.1);
+      /* Light Primary Color */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 15px;
+      font-size: 1.25rem;
+      color: var(--dark);
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 0;
+    }
+
+    /* --- Strong Footer --- */
+    .strong-footer {
+      background-color: #111;
+      color: #bbb;
+      padding: 60px 0 0;
+      font-size: 0.9rem;
+      margin-top: 60px;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      border-bottom: 1px solid #222;
+    }
+
+    .footer-col h3 {
+      color: white;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 40px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .footer-col p {
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #999;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links-list li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links-list a {
+      color: #bbb;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer-links-list a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+
+    .footer-links-list a i {
+      margin-right: 8px;
+      font-size: 0.8rem;
+      color: var(--primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      background: #222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .social-btn:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(230, 0, 35, 0.3);
+    }
+
+    .footer-bottom {
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      background: #0a0a0a;
+      color: #777;
+    }
+
+    .footer-bottom p {
+      margin: 0;
+    }
+
+    /* Mobile Tweaks */
+    @media (max-width: 600px) {
+      .downloader-box {
+        flex-direction: column;
+        padding: 15px;
+        border-radius: 20px;
+      }
+
+      .input-wrapper {
+        margin-bottom: 15px;
+      }
+
+      input {
+        padding: 15px 15px 15px 45px;
+      }
+
+      .download-btn {
+        width: 100%;
+        padding: 15px;
+        justify-content: center;
+        margin-left: 0;
+      }
+
+      .paste-btn {
+        display: none;
+        /* Hide paste button on very small screens to avoid clutter */
+      }
+    }
+
+    /* --- FAQ Section --- */
+    .faq-section {
+      padding: 60px 20px;
+      background: white;
+      text-align: center;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    details {
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    summary {
+      font-weight: 600;
+      font-size: 1.1rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--dark);
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: var(--primary);
+      transition: transform 0.3s ease;
+      font-weight: 300;
+    }
+
+    details[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    details p {
+      margin-top: 15px;
+      color: var(--gray);
+      line-height: 1.6;
+      padding-bottom: 15px;
+    }
+
+    /* --- SEO Content Section --- */
+    .seo-section {
+      padding: 60px 20px;
+      background: #fff;
+      color: #555;
+      border-top: 1px solid #eee;
+    }
+
+    .seo-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .seo-container h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+      color: var(--dark);
+    }
+
+    .seo-container h3 {
+      font-size: 1.4rem;
+      color: var(--dark);
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    .seo-container p {
+      margin-bottom: 15px;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .seo-container ul {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+
+    .seo-container li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">
+      <i class="fas fa-map-pin"></i> PinSaver
+    </div>
+    <div class="nav-links">
+      <a href="pages/how-to-use.html">How to Use</a>
+      <a href="pages/features.html">Features</a>
+    </div>
+  </nav>
+
+  <!-- Hero / Downloader Section -->
+  <section class="hero">
+    <h1>Pinterest Video Downloader</h1>
+    <p>Save your favorite Pins in HD quality. Free, fast, and unlimited.</p>
+
+    <div class="downloader-box">
+      <div class="input-wrapper">
+        <i class="fas fa-link input-icon"></i>
+        <input type="text" id="pinUrl" placeholder="Paste Pinterest link here..." />
+        <button class="paste-btn" onclick="pasteFromClipboard()">Paste</button>
+      </div>
+      <button class="download-btn" onclick="downloadVideo()">
+        Download <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Results Container -->
+    <div id="result-area"></div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="info-section" id="how-it-works">
+    <h2>How to Download Video</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <i class="fas fa-copy step-icon"></i>
+        <h3>1. Copy Link</h3>
+        <p>Open the Pinterest app or website, find the video, and copy its URL.</p>
+      </div>
+      <div class="step-card">
+        <i class="fas fa-paste step-icon"></i>
+        <h3>2. Paste Link</h3>
+        <p>Paste the link into the search bar above and click the Download button.</p>
+      </div>
+      <div class="step-card">
+        <i class="fas fa-download step-icon"></i>
+        <h3>3. Save Video</h3>
+        <p>Wait a moment, then click the "Download Video" button to save it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <h2>Why Use PinSaver?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-video"></i>
+        </div>
+        <h3>High Quality Videos</h3>
+        <p>Download Pinterest videos in full HD quality. We ensure that you get the best resolution available.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-infinity"></i>
+        </div>
+        <h3>Unlimited & Free</h3>
+        <p>There are no limits on the number of downloads. Use our service as much as you want, completely free.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h3>No Registration</h3>
+        <p>No need to create an account or log in. Just paste the link and start downloading instantly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3>Multi-Device Support</h3>
+        <p>Works perfectly on all devices including iPhone, Android, Windows, Mac, and Linux.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-container">
+
+      <div class="faq-item">
+        <details>
+          <summary>Is PinSaver really free?</summary>
+          <p>Yes, PinSaver is 100% free to use. You can download as many videos, images, and GIFs as you like without
+            any limits or hidden fees.</p>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>Can I download videos on my phone?</summary>
+          <p>Absolutely! PinSaver is optimized for all devices. It works perfectly on Android phones, iPhones (iOS),
+            tablets, and desktop computers.</p>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>Where are the downloaded files saved?</summary>
+          <p>On most devices, files are automatically saved to your "Downloads" folder. On iPhone, you might find them
+            in the "Files" app or you can choose to save them to your Photos app.</p>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>Does PinSaver store my downloaded videos?</summary>
+          <p>No. We do not host or store any videos on our servers. PinSaver acts as a tool to find the original file
+            link from Pinterest and serve it directly to you. Your privacy is paramount.</p>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>Do you support downloading GIFs?</summary>
+          <p>Yes, we support downloading high-quality GIFs as well as images and videos from Pinterest.</p>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- About / SEO Content Section -->
+  <section class="seo-section">
+    <div class="seo-container">
+      <h2>About Pinterest Video Downloader</h2>
+      <p>Pinterest is a boundless universe of creativity. It's the place where billions of ideas—from life-changing DIY
+        projects to mouth-watering recipes—come to life in visual form. But in this universe of inspiration, there's one
+        frustrating limitation: there is no "download" button for videos. This means that amazing tutorial, workout, or
+        design idea is trapped online, unavailable when a user is on a plane, in the kitchen with spotty Wi-Fi, or
+        simply wants to save it forever.</p>
+
+      <p>This is exactly why PinSaver was created. It is the missing key. As a dedicated <strong>Pinterest Video
+          Downloader</strong>, our tool closes the gap between finding inspiration and truly owning it. We've built a
+        simple, fast, and secure way for anyone to transform a Pinterest link into a high-quality MP4 video file that
+        can be saved, kept, and watched anytime, anywhere.</p>
+
+      <h3>How PinSaver Works its Magic</h3>
+      <p>PinSaver is a smart, web-based tool that does the complicated technical work so users don't have to. When a
+        video is watched on Pinterest, it's being streamed in tiny pieces, which is why a browser can't just save it.
+        PinSaver's process is simple:</p>
+      <ul>
+        <li>It takes the link.</li>
+        <li>Its powerful servers talk to Pinterest to find the original, complete video file.</li>
+        <li>It puts the file together and presents it as a simple download.</li>
+      </ul>
+      <p>The final result is a clean, watermark-free MP4 file that will work on any device. Best of all, it all happens
+        in the cloud. There is no software to install, no browser extensions to worry about, and no apps to download.
+        It's just a clean, simple, and powerful web tool.</p>
+
+      <h3>A Focus on Crystal-Clear Quality</h3>
+      <p>Many online downloaders cut corners on quality. They shrink videos to save server space, leaving users with a
+        blurry, pixelated mess. PinSaver is different. Our system is built to be a "quality hunter." It automatically
+        finds and grabs the best possible version of the video that Pinterest has stored—usually crystal-clear
+        <strong>1080p</strong> or <strong>720p HD</strong>.
+      </p>
+      <p>We pull the original file directly from the source. This means the downloaded video is a perfect copy of the
+        best version available on the platform, with no extra compression or quality loss.</p>
+
+      <h3>More Than Just Videos</h3>
+      <p>PinSaver is a multi-talented tool that can handle all the main media types found on Pinterest:</p>
+      <ul>
+        <li><strong>MP4 Videos:</strong> Perfect for tutorials and inspirational clips.</li>
+        <li><strong>GIFs:</strong> For saving and sharing animated memes and reactions.</li>
+        <li><strong>Images (JPG/PNG):</strong> To download stunning, high-resolution photos.</li>
+      </ul>
+      <p>No matter the content, the process is always the same simple three steps: Copy, Paste, Download.</p>
+
+      <h3>Built for Any Screen, Big or Small</h3>
+      <p>PinSaver was designed to work flawlessly on every device.</p>
+      <ul>
+        <li><strong>On a Phone (iOS or Android):</strong> The website feels like a fast, lightweight app that is easy to
+          use with touch and works perfectly with a phone's download system.</li>
+        <li><strong>On a Computer (Desktop):</strong> The spacious interface makes it easy to download multiple files
+          and organize a collection of saved content.</li>
+      </ul>
+
+      <h3>Privacy is Not an Option; It's a Guarantee</h3>
+      <p>A free tool should never cost a user their privacy. PinSaver was built with a core commitment to user
+        anonymity.</p>
+      <ul>
+        <li><strong>We don't watch:</strong> We have a strict no-logging policy. We never track what is downloaded.</li>
+        <li><strong>We don't store:</strong> We never keep copies of the videos on our servers.</li>
+        <li><strong>We don't ask:</strong> We never require registration. No names, no emails, no passwords. Ever.</li>
+      </ul>
+
+      <h3>A Note on Responsible Downloading</h3>
+      <p>We provide the tool, but we also encourage our users to be great digital citizens. The best use for downloaded
+        videos is for personal inspiration—saving a workout for the gym, a recipe for the kitchen, or a design idea for
+        a private mood board. We strongly urge everyone to respect the hard work and intellectual property of the
+        original creators. If content is to be shared publicly, always give credit or, even better, ask for permission
+        first.</p>
+
+      <p>By blending powerful technology with a simple, clean design, PinSaver's goal is to be the only tool needed to
+        build a personal, offline library of Pinterest inspiration. Start saving what inspires today.</p>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <!-- Strong Footer -->
+  <footer class="strong-footer">
+    <div class="footer-container">
+      <!-- Brand & Desc -->
+      <div class="footer-col">
+        <div class="logo" style="color: white; margin-bottom: 20px;">
+          <i class="fas fa-map-pin" style="color: var(--primary);"></i> PinSaver
+        </div>
+        <p>PinSaver allows you to download your favorite Pinterest videos, images, and GIFs in high quality for free.
+          Fast, secure, and easy to use.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links-list">
+          <li><a href="index.html"><i class="fas fa-angle-right"></i> Home</a></li>
+          <li><a href="pages/how-to-use.html"><i class="fas fa-angle-right"></i> How to Use</a></li>
+          <li><a href="pages/features.html"><i class="fas fa-angle-right"></i> Features</a></li>
+        </ul>
+      </div>
+
+      <!-- Guides -->
+      <div class="footer-col">
+        <h3>Guides</h3>
+        <ul class="footer-links-list">
+          <li><a href="pages/what-is-pinterest-video-downloader.html"><i class="fas fa-angle-right"></i> What is
+              PinSaver?</a>
+          </li>
+          <li><a href="pages/is-it-legal-to-download-pinterest-videos.html"><i class="fas fa-angle-right"></i> Is it
+              Legal?</a></li>
+          <li><a href="pages/pinterest-video-formats-quality.html"><i class="fas fa-angle-right"></i> Video Quality</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="footer-col">
+        <h3>Legal</h3>
+        <ul class="footer-links-list">
+          <li><a href="pages/privacy.html"><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
+          <li><a href="pages/terms.html"><i class="fas fa-angle-right"></i> Terms of Service</a></li>
+          <li><a href="pages/disclaimer.html"><i class="fas fa-angle-right"></i> Disclaimer</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h3>Support</h3>
+        <ul class="footer-links-list">
+          <li><a href="pages/about.html"><i class="fas fa-angle-right"></i> About Us</a></li>
+          <li><a href="pages/contact.html"><i class="fas fa-angle-right"></i> Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 PinSaver. Not affiliated with Pinterest.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Paste Functionality
+    async function pasteFromClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById("pinUrl").value = text;
+      } catch (err) {
+        alert('Please manually paste the link (Clipboard access denied)');
+      }
+    }
+
+    // Download Logic
+    async function downloadVideo() {
+      const urlInput = document.getElementById("pinUrl");
+      const resultArea = document.getElementById("result-area");
+      const loader = document.getElementById("loader");
+
+      const url = urlInput.value.trim();
+
+      // Reset UI
+      resultArea.innerHTML = "";
+
+      if (!url) {
+        resultArea.innerHTML = `<div class="error-msg"><i class="fas fa-exclamation-circle"></i> Please paste a valid Pinterest URL</div>`;
+        return;
+      }
+
+      // Show Loader
+      loader.style.display = "block";
+
+      try {
+        // Using the backend provided in the original code
+        const res = await fetch(
+          `https://pinterest-backend-ymty.onrender.com/download?url=${encodeURIComponent(url)}`
+        );
+        const data = await res.json();
+
+        // Hide Loader
+        loader.style.display = "none";
+
+        if (data.video) {
+          resultArea.innerHTML = `
+            <div class="video-card">
+              <div class="success-msg"><i class="fas fa-check-circle"></i> Video Found!</div>
+              <p>Your video is ready to be saved.</p>
+              <a class="download-link" href="${data.video}" target="_blank" download>
+                <i class="fas fa-file-download"></i> Download Video (.mp4)
+              </a>
+            </div>
+          `;
+        } else {
+          resultArea.innerHTML = `<div class="error-msg"><i class="fas fa-times-circle"></i> ${data.error || "Could not fetch video."}</div>`;
+        }
+      } catch (err) {
+        loader.style.display = "none";
+        resultArea.innerHTML = `<div class="error-msg"><i class="fas fa-wifi"></i> Server error. Please try again later.</div>`;
+      }
+    }
+  </script>
+
+</body>
+
+</html>

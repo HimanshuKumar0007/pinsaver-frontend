@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disclaimer - PinSaver</title>
+    <meta name="description" content="Disclaimer for PinSaver." />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary: #e60023;
+            /* Pinterest Red */
+            --primary-hover: #ad081b;
+            --dark: #111111;
+            --light: #f8f9fa;
+            --gray: #767676;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+                position: relative;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .hamburger {
+                display: flex;
+                z-index: 101;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                gap: 20px;
+                padding: 30px 0;
+
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-20px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-links a {
+                padding: 12px 20px;
+                width: auto;
+                border-bottom: none;
+                font-size: 1.1rem;
+                color: var(--dark);
+                opacity: 0.8;
+                transition: 0.2s;
+                border-radius: 8px;
+            }
+
+            .nav-links a:hover {
+                background: var(--light);
+                color: var(--primary);
+                opacity: 1;
+                transform: translateX(5px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 1rem 3%;
+            }
+
+            .logo {
+                font-size: 1rem;
+                gap: 5px;
+            }
+        }
+
+        /* --- Content Section --- */
+        .content-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            color: var(--gray);
+        }
+
+        /* --- Strong Footer --- */
+        .strong-footer {
+            background-color: #111;
+            color: #bbb;
+            padding: 60px 0 0;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            border-bottom: 1px solid #222;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-col p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #999;
+        }
+
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links-list a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .footer-links-list a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-links-list a i {
+            margin-right: 8px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(230, 0, 35, 0.3);
+        }
+
+        .footer-bottom {
+            padding: 25px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            background: #0a0a0a;
+            color: #777;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 40px 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .strong-footer {
+                padding-top: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="../index.html" class="logo">
+            <i class="fas fa-map-pin"></i> PinSaver
+        </a>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html">Home</a>
+            <a href="how-to-use.html">How to Use</a>
+            <a href="features.html">Features</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <h1>Detailed Disclaimer for PinSaver</h1>
+        <p><strong>Last updated: January 2026</strong></p>
+
+        <p>The information and services provided by PinSaver ("we", "our", or "us") are for general informational and
+            utility purposes only. By accessing and using our website, you accept and agree to be bound by this
+            Disclaimer. If you do not agree with any part of this Disclaimer, you should discontinue using our website.
+        </p>
+
+        <h2>1. General Information</h2>
+        <p>PinSaver is an online tool designed to help users access publicly available content from Pinterest for
+            personal and informational use. We do not guarantee the accuracy, reliability, completeness, or suitability
+            of any information or service provided through our website.</p>
+        <p>Any reliance you place on the information or services provided by PinSaver is strictly at your own risk.</p>
+
+        <h2>2. No Legal or Professional Advice</h2>
+        <p>Nothing on PinSaver constitutes legal, financial, or professional advice of any kind. You should consult a
+            qualified professional before making any decisions based on the information available on this website.</p>
+
+        <h2>3. Copyright and Content Responsibility</h2>
+        <p>PinSaver does not host, store, or claim ownership over any content from Pinterest. All content is retrieved
+            directly from publicly accessible Pinterest servers.</p>
+        <p>Users are solely responsible for ensuring that their use of accessed content complies with applicable
+            copyright laws and Pinterest’s Terms of Service. PinSaver is not responsible for any misuse, copyright
+            infringement, or legal consequences arising from user actions.</p>
+
+        <h2>4. External Links Disclaimer</h2>
+        <p>PinSaver may contain links to external websites that are not provided or maintained by us. We do not
+            guarantee the accuracy, relevance, timeliness, or completeness of any information on these external
+            websites.</p>
+        <p>We are not responsible for the content, privacy policies, or practices of third-party websites.</p>
+
+        <h2>5. Technical Disclaimer</h2>
+        <p>PinSaver is provided "as is" and "as available" without warranties of any kind, express or implied. We do not
+            guarantee that the website will be available at all times, uninterrupted, secure, or free from errors, bugs,
+            viruses, or harmful components.</p>
+        <p>We are not responsible for any technical issues, data loss, or damages that may occur as a result of using
+            our website.</p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, PinSaver shall not be liable for any direct, indirect, incidental,
+            consequential, or special damages arising out of or in connection with your use of the website, even if we
+            have been advised of the possibility of such damages.</p>
+
+        <h2>7. Consent</h2>
+        <p>By using PinSaver, you hereby consent to this Disclaimer and agree to its terms.</p>
+
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions about this Disclaimer, you may contact us at:</p>
+        <p>📧 Email: humanshuk8@gmail.com</p>
+    </section>
+
+    <!-- Footer -->
+    <!-- Strong Footer -->
+    <footer class="strong-footer">
+        <div class="footer-container">
+            <!-- Brand & Desc -->
+            <div class="footer-col">
+                <div class="logo" style="color: white; margin-bottom: 20px;">
+                    <i class="fas fa-map-pin" style="color: var(--primary);"></i> PinSaver
+                </div>
+                <p>PinSaver allows you to download your favorite Pinterest videos, images, and GIFs in high quality for
+                    free. Fast, secure, and easy to use.</p>
+                <div class="social-links">
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links-list">
+                    <li><a href="../index.html"><i class="fas fa-angle-right"></i> Home</a></li>
+                    <li><a href="how-to-use.html"><i class="fas fa-angle-right"></i> How to Use</a></li>
+                    <li><a href="features.html"><i class="fas fa-angle-right"></i> Features</a></li>
+                </ul>
+            </div>
+
+            <!-- Guides -->
+            <div class="footer-col">
+                <h3>Guides</h3>
+                <ul class="footer-links-list">
+                    <li><a href="what-is-pinterest-video-downloader.html"><i class="fas fa-angle-right"></i> What is
+                            PinSaver?</a></li>
+                    <li><a href="is-it-legal-to-download-pinterest-videos.html"><i class="fas fa-angle-right"></i> Is it
+                            Legal?</a></li>
+                    <li><a href="pinterest-video-formats-quality.html"><i class="fas fa-angle-right"></i> Video
+                            Quality</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal -->
+            <div class="footer-col">
+                <h3>Legal</h3>
+                <ul class="footer-links-list">
+                    <li><a href="privacy.html"><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
+                    <li><a href="terms.html"><i class="fas fa-angle-right"></i> Terms of Service</a></li>
+                    <li><a href="disclaimer.html"><i class="fas fa-angle-right"></i> Disclaimer</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul class="footer-links-list">
+                    <li><a href="about.html"><i class="fas fa-angle-right"></i> About Us</a></li>
+                    <li><a href="contact.html"><i class="fas fa-angle-right"></i> Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 PinSaver. Not affiliated with Pinterest.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
