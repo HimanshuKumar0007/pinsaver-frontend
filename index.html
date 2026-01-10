@@ -904,15 +904,25 @@
         if (data.video) {
           resultArea.innerHTML = `
             <div class="video-card">
-              <div class="success-msg"><i class="fas fa-check-circle"></i> Video Found!</div>
+              <div class="success-msg">✅ Video Found!</div>
               <p>Your video is ready to be saved.</p>
-              <a class="download-link" href="${data.video}" target="_blank">
-                <i class="fas fa-file-download"></i> Download Video (.mp4)
+
+              <a 
+                href="${data.video}" 
+                class="download-link" 
+                target="_blank" 
+                download
+              >
+                Download Video
               </a>
             </div>
           `;
         } else {
-          resultArea.innerHTML = `<div class="error-msg"><i class="fas fa-times-circle"></i> ${data.error || "Could not fetch video."}</div>`;
+          resultArea.innerHTML = `
+            <div class="error-msg">
+              ❌ ${data.error || 'No video available for this pin'}
+            </div>
+          `;
         }
       } catch (err) {
         loader.style.display = "none";
