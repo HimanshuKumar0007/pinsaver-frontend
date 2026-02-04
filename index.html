@@ -919,10 +919,8 @@
               <p>Your video is ready to be saved.</p>
 
               <a 
-                href="${data.video}" 
-                class="download-link" 
-                target="_blank" 
-                download
+                href="https://pinterest-backend-ymty.onrender.com/download-video?video=${encodeURIComponent(data.video)}" 
+                class="download-link"
               >
                 Download Video
               </a>
